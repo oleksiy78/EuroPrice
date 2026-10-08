@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>EuroPrice</title>
+<style>
+:root{--blue:#0b63f6;--dark:#111827;--muted:#6b7280;--bg:#f4f7fb;--card:#fff;--line:#e5e7eb;--green:#159447;--red:#d83b3b}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--dark)}
+header{background:linear-gradient(135deg,#0758d9,#1688ff);color:#fff;padding:18px 16px 20px;border-radius:0 0 22px 22px}
+h1{margin:0;font-size:27px}header small{opacity:.85}
+main{padding:16px;max-width:760px;margin:auto}
+.card{background:var(--card);border-radius:18px;padding:15px;margin-bottom:14px;box-shadow:0 3px 14px #0000000d}
+.selects{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}
+select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:15px}
+.pills{display:flex;gap:7px;overflow:auto;padding-bottom:3px}.pill{border:1px solid var(--line);background:#fff;border-radius:20px;padding:8px 12px;white-space:nowrap;font-size:13px}.pill.active{background:#eaf2ff;border-color:#a9c7ff;color:#0758d9}
+.table{overflow:hidden;border:1px solid var(--line);border-radius:15px}
+.row{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;align-items:center;border-bottom:1px solid var(--line);min-height:66px;padding:7px 9px}.row:last-child{border-bottom:0}
+.head{background:#f8fafc;font-weight:700}.prod{font-size:13px;font-weight:600}.unit{font-size:10px;color:var(--muted);margin-top:3px}
+.country{text-align:center;font-size:12px}.country .flag{display:block;font-size:25px;line-height:25px}.price{text-align:center;font-weight:700;font-size:14px}.diff{text-align:center;font-size:11px;font-weight:700}.cheaper{color:var(--green)}.expensive{color:var(--red)}
+.summary{font-weight:700;text-align:center;padding:8px 4px}.updated{text-align:center;color:var(--muted);font-size:11px;margin-top:8px}
+.actions{display:flex;gap:10px}.btn{flex:1;border:0;border-radius:13px;padding:13px;font-size:15px;font-weight:700;background:#eaf2ff;color:#0758d9}.btn.primary{background:var(--blue);color:#fff}
+.basket-item{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.basket-item:last-child{border-bottom:0}
+.qty{display:flex;align-items:center;gap:8px}.qty button{width:32px;height:32px;border:0;border-radius:50%;background:#eaf2ff;color:#0758d9;font-size:20px}.qty span{min-width:20px;text-align:center;font-weight:700}
+.total{display:flex;justify-content:space-between;padding-top:12px;font-weight:700}.saving{color:var(--green)}
+.hidden{display:none}.modal{position:fixed;inset:0;background:#0008;display:flex;align-items:flex-end;z-index:5}.modalbox{background:#fff;border-radius:22px 22px 0 0;padding:20px;width:100%;max-height:80vh;overflow:auto}.modalbox h2{margin-top:0}.close{float:right;border:0;background:#eee;border-radius:50%;width:34px;height:34px}
+@media(max-width:420px){.row{grid-template-columns:1.15fr .9fr .9fr .8fr}.prod{font-size:12px}.price{font-size:13px}}
+</style>
+</head>
+<body>
+<header><h1>€ EuroPrice</h1><small>Compare everyday prices across Europe</small></header>
+<main>
+<section class="card">
+<div class="selects">
+<div><label>FROM</label><select id="from"></select></div>
+<div><label>TO</label><select id="to"></select></div>
+</div>
+<div class="pills" id="pills"></div>
+</section>
+<section class="card">
+<div id="summary" class="summary"></div>
+<div class="table"><div class="row head"><div>Product</div><div id="hFrom" class="country"></div><div id="hTo" class="country"></div><div>Diff.</div></div><div id="rows"></div></div>
+<div id="updated" class="updated"></div>
+</section>
+<section class="card actions">
+<button class="btn primary" onclick="showBasket()">🛒 Basket</button>
+<button class="btn" onclick="showDetails()">ⓘ Details</button>
+</section>
+<section id="basket" class="card hidden"><h2>Basket</h2><div id="basketItems"></div><div class="total"><span id="totalFrom"></span><span id="totalTo"></span></div><div class="total"><span>Saving</span><span id="saving" class="saving"></span></div></section>
+</main>
+<div id="modal" class="modal hidden" onclick="if(event.target===this)closeModal()"><div class="modalbox"><button class="close" onclick="closeModal()">×</button><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div>
+<script>
+const countries={DE:['🇩🇪','Germany'],ES:['🇪🇸','Spain'],FR:['🇫🇷','France'],IT:['🇮🇹','Italy'],AT:['🇦🇹','Austria'],HR:['🇭🇷','Croatia'],PT:['🇵🇹','Portugal'],GR:['🇬🇷','Greece'],CZ:['🇨🇿','Czechia'],PL:['🇵🇱','Poland']};
+const products=[['fuel','Fuel — Super 95'],['diesel','Fuel — Diesel'],['milk','Milk'],['eggs','Eggs'],['chicken','Chicken breast'],['bread','Bread'],['rice','Rice'],['cheese','Cheese'],['apples','Apples'],['potatoes','Potatoes'],['beer','Beer'],['wine','Wine'],['cigs','Cigarettes']];
+let data=null,from='DE',to='ES',filter='all',basket={};
+const $=id=>document.getElementById(id);
+function money(v){return '€'+v.toFixed(v<10?2:2)}
+function init(){
+const f=$('from'),t=$('to');Object.entries(countries).forEach(([k,v])=>{f.add(new Option(v[1],k));t.add(new Option(v[1],k))});f.value=from;t.value=to;
+f.onchange=()=>{from=f.value;render()};t.onchange=()=>{to=t.value;render()};
+products.forEach((p,i)=>{const b=document.createElement('button');b.className='pill'+(i===0?' active':'');b.textContent=p[1];b.onclick=()=>{filter=p[0];document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()};$('pills').appendChild(b)});
+fetch('https://raw.githubusercontent.com/oleksiy78/EuroPrice/main/prices.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(r.status);return r.json()}).then(j=>{data=j;render()}).catch(e=>{$('summary').textContent='Unable to load prices';$('updated').textContent='Please check your internet connection.'});
+}
+function render(){
+if(!data)return;
+const list=filter==='all'?products:products.filter(x=>x[0]===filter);
+$('hFrom').innerHTML=countries[from][0]+'<br>'+countries[from][1];$('hTo').innerHTML=countries[to][0]+'<br>'+countries[to][1];
+let cheaper=0, a=0,b=0;
+$('rows').innerHTML=list.map(([k,n])=>{const x=data.prices[from][k],y=data.prices[to][k];if(!x||!y)return '';
+const pct=((y.price-x.price)/x.price*100);const winner=x.price<y.price?countries[from][1]:x.price>y.price?countries[to][1]:'same';if(x.price<y.price)cheaper++;a+=x.price;b+=y.price;
+const shown=v=>k==='wine'?'from '+money(v):money(v);
+return '<div class="row"><div class="prod">'+n+'<div class="unit">'+x.unit+'</div></div><div class="price">'+shown(x.price)+'</div><div class="price">'+shown(y.price)+'</div><div class="diff '+(pct>0?'cheaper':'expensive')+'">'+(pct>0?'+'+pct.toFixed(0):pct.toFixed(0))+'%</div></div>'}).join('');
+$('summary').textContent=from===to?'Choose two different countries':cheaper+' of '+list.length+' selected prices are cheaper in '+countries[from][1];
+$('updated').textContent='Prices updated: '+data.meta.updated;
+}
+function showBasket(){ $('basket').classList.toggle('hidden');renderBasket();$('basket').scrollIntoView({behavior:'smooth'})}
+function add(k,d){basket[k]=(basket[k]||0)+d;if(basket[k]<=0)delete basket[k];renderBasket()}
+function renderBasket(){if(!data)return;const keys=Object.keys(basket);$('basketItems').innerHTML=keys.length?keys.map(k=>{const p=products.find(x=>x[0]===k);return '<div class="basket-item"><div><b>'+p[1]+'</b><div class="unit">'+data.prices[from][k].unit+'</div></div><div class="qty"><button onclick="add(\''+k+'\',-1)">−</button><span>'+basket[k]+'</span><button onclick="add(\''+k+'\',1)">+</button></div></div>'}).join(''):'<div class="unit">No products selected yet.</div>';
+let a=0,b=0;keys.forEach(k=>{a+=data.prices[from][k].price*basket[k];b+=data.prices[to][k].price*basket[k]});$('totalFrom').textContent=countries[from][1]+': '+money(a);$('totalTo').textContent=countries[to][1]+': '+money(b);$('saving').textContent=money(Math.abs(a-b))+' ('+(a?Math.abs(a-b)/a*100:0).toFixed(1)+'%)'}
+function showDetails(){if(!data)return;const list=filter==='all'?products:products.filter(x=>x[0]===filter);$('modalTitle').textContent='Price details';$('modalBody').innerHTML=list.map(([k,n])=>{const x=data.prices[from][k],y=data.prices[to][k];if(!x||!y)return '';return '<p><b>'+n+'</b><br>'+countries[from][1]+': '+x.source+' — '+x.date+'<br>'+countries[to][1]+': '+y.source+' — '+y.date+'</p>'}).join('');$('modal').classList.remove('hidden')}
+function closeModal(){$('modal').classList.add('hidden')}
+init();
+</script>
+</body></html>
