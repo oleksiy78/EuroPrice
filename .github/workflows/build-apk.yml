@@ -5,7 +5,6 @@ on:
   push:
     paths:
       - 'index.html'
-      - 'prices.json'
       - 'app/**'
       - 'build.gradle'
       - 'settings.gradle'
