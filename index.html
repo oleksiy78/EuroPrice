@@ -3,83 +3,83 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
 <title>EuroPrice</title>
 <style>
-:root{--blue:#0b63f6;--dark:#111827;--muted:#6b7280;--bg:#f4f7fb;--card:#fff;--line:#e5e7eb;--green:#159447;--red:#d83b3b}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--dark)}
-header{background:linear-gradient(135deg,#0758d9,#1688ff);color:#fff;padding:18px 16px 20px;border-radius:0 0 22px 22px}
-h1{margin:0;font-size:27px}header small{opacity:.85}
-main{padding:16px;max-width:760px;margin:auto}
-.card{background:var(--card);border-radius:18px;padding:15px;margin-bottom:14px;box-shadow:0 3px 14px #0000000d}
-.selects{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}
-select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:15px}
-.pills{display:flex;gap:7px;overflow:auto;padding-bottom:3px}.pill{border:1px solid var(--line);background:#fff;border-radius:20px;padding:8px 12px;white-space:nowrap;font-size:13px}.pill.active{background:#eaf2ff;border-color:#a9c7ff;color:#0758d9}
-.table{overflow:hidden;border:1px solid var(--line);border-radius:15px}
-.row{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;align-items:center;border-bottom:1px solid var(--line);min-height:66px;padding:7px 9px}.row:last-child{border-bottom:0}
-.head{background:#f8fafc;font-weight:700}.prod{font-size:13px;font-weight:600}.unit{font-size:10px;color:var(--muted);margin-top:3px}
-.country{text-align:center;font-size:12px}.country .flag{display:block;font-size:25px;line-height:25px}.price{text-align:center;font-weight:700;font-size:14px}.diff{text-align:center;font-size:11px;font-weight:700}.cheaper{color:var(--green)}.expensive{color:var(--red)}
-.summary{font-weight:700;text-align:center;padding:8px 4px}.updated{text-align:center;color:var(--muted);font-size:11px;margin-top:8px}
-.actions{display:flex;gap:10px}.btn{flex:1;border:0;border-radius:13px;padding:13px;font-size:15px;font-weight:700;background:#eaf2ff;color:#0758d9}.btn.primary{background:var(--blue);color:#fff}
-.basket-item{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.basket-item:last-child{border-bottom:0}
-.qty{display:flex;align-items:center;gap:8px}.qty button{width:32px;height:32px;border:0;border-radius:50%;background:#eaf2ff;color:#0758d9;font-size:20px}.qty span{min-width:20px;text-align:center;font-weight:700}
-.total{display:flex;justify-content:space-between;padding-top:12px;font-weight:700}.saving{color:var(--green)}
-.hidden{display:none}.modal{position:fixed;inset:0;background:#0008;display:flex;align-items:flex-end;z-index:5}.modalbox{background:#fff;border-radius:22px 22px 0 0;padding:20px;width:100%;max-height:80vh;overflow:auto}.modalbox h2{margin-top:0}.close{float:right;border:0;background:#eee;border-radius:50%;width:34px;height:34px}
-@media(max-width:420px){.row{grid-template-columns:1.15fr .9fr .9fr .8fr}.prod{font-size:12px}.price{font-size:13px}}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#eef0f3;color:#111827;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.app{max-width:600px;margin:auto;min-height:100vh;background:#fff}
+.top{background:#111827;color:#fff;padding:22px 18px 18px}
+h1{margin:0;font-size:28px}.sub{opacity:.75;margin:4px 0 12px}
+.lang{display:flex;gap:8px}.lang button{padding:8px 12px;border-radius:10px;border:1px solid #4b5563;background:#374151;color:#fff;font-weight:700}.lang button.active{background:#fff;color:#111827}
+.content{padding:18px}.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{font-size:13px;color:#6b7280;display:block;margin-bottom:6px}
+select{width:100%;padding:13px 10px;border-radius:12px;border:1px solid #d1d5db;background:#fff;font-size:16px}
+.tabs{display:flex;gap:8px;overflow:auto;padding:4px 0 4px;margin-top:12px}.tab{white-space:nowrap;padding:9px 12px;border:1px solid #d1d5db;border-radius:20px;background:#fff;font-size:13px}.tab.active{background:#e5e7eb;font-weight:800}
+.card{margin-top:14px;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden}.head{display:grid;grid-template-columns:1.45fr 1fr 1fr;padding:14px 12px;background:#f8fafc;font-weight:800;gap:5px;align-items:center}.head>span:nth-child(n+2){text-align:center}
+.country-head{display:flex;flex-direction:column;align-items:center;gap:4px;line-height:1.05;text-align:center}.flag{font-size:24px;line-height:1}.country-name{font-size:13px}
+.item{display:grid;grid-template-columns:1.45fr 1fr 1fr;gap:5px;padding:12px;border-top:1px solid #eee;align-items:center;cursor:pointer}.price{text-align:right;font-weight:750}.name{font-size:15px}.unit{display:block;font-size:11px;color:#9ca3af;margin-top:2px}
+.badge{display:inline-block;margin-left:5px;padding:2px 5px;border-radius:6px;font-size:10px;font-weight:800;background:#ecfdf5;color:#047857}.higher{background:#fef2f2;color:#b91c1c}
+.summary{margin-top:14px;padding:16px;border-radius:16px;background:#f8fafc}.big{font-size:21px;font-weight:850}.small{font-size:12px;color:#6b7280;margin-top:5px;line-height:1.4}.update{font-size:12px;color:#6b7280;margin:12px 2px;line-height:1.45}.from-label{font-size:10px;color:#6b7280;margin-left:3px;font-weight:800}
+.details{margin:0 12px 12px;border:1px solid #e5e7eb;border-radius:14px;padding:12px;background:#fff}.details-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.details-head button{border:0;background:#f3f4f6;border-radius:8px;padding:6px 9px}.details-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:11px;line-height:1.45;color:#4b5563}.details-grid b{color:#111827}
+.basket{margin-top:16px;border:1px solid #e5e7eb;border-radius:16px;padding:15px}.basket-head{display:flex;justify-content:space-between;align-items:center}.basket h2{margin:0;font-size:20px}.clear{border:0;background:#f3f4f6;border-radius:8px;padding:7px 10px}.muted{color:#6b7280;font-size:13px}.basket-row{display:grid;grid-template-columns:minmax(0,1fr) 30px 34px 30px;gap:5px;align-items:center;padding:8px 0;border-bottom:1px solid #eee}.basket-name{font-size:15px}.basket-unit{font-size:11px;color:#6b7280}.qbtn{width:30px;height:30px;border:0;border-radius:8px;background:#eaf2ff;color:#0758d9;font-size:18px}.qty{text-align:center;font-weight:700}.basket-result{margin-top:12px;padding:12px;border-radius:12px;background:#f8fafc}.basket-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.basket-country{padding:9px;border-radius:9px;background:#fff}.saving{margin-top:9px;font-weight:800}
 </style>
 </head>
 <body>
-<header><h1>€ EuroPrice</h1><small>Compare everyday prices across Europe</small></header>
-<main>
-<section class="card">
-<div class="selects">
-<div><label>FROM</label><select id="from"></select></div>
-<div><label>TO</label><select id="to"></select></div>
-</div>
-<div class="pills" id="pills"></div>
+<div class="app">
+<header class="top">
+<h1>EuroPrice</h1>
+<div class="sub" id="subtitle">Compare everyday prices across Europe</div>
+<div class="lang"><button id="en" class="active" onclick="setLang('en')">English</button><button id="de" onclick="setLang('de')">Deutsch</button></div>
+</header>
+<main class="content">
+<section class="card" style="padding:15px">
+<div class="row2"><div><label id="fromLabel">From</label><select id="from"></select></div><div><label id="toLabel">To</label><select id="to"></select></div></div>
+<div class="tabs" id="tabs"></div>
 </section>
-<section class="card">
-<div id="summary" class="summary"></div>
-<div class="table"><div class="row head"><div>Product</div><div id="hFrom" class="country"></div><div id="hTo" class="country"></div><div>Diff.</div></div><div id="rows"></div></div>
-<div id="updated" class="updated"></div>
+<div id="result"></div>
+<section class="basket">
+<div class="basket-head"><h2>🛒 <span id="basketTitle">My Basket</span></h2><button class="clear" id="clear">Clear</button></div>
+<p class="muted" id="basketHint">Choose quantities for the items you want to compare.</p>
+<div id="basketItems"></div><div id="basketResult" class="basket-result"></div>
 </section>
-<section class="card actions">
-<button class="btn primary" onclick="showBasket()">🛒 Basket</button>
-<button class="btn" onclick="showDetails()">ⓘ Details</button>
-</section>
-<section id="basket" class="card hidden"><h2>Basket</h2><div id="basketItems"></div><div class="total"><span id="totalFrom"></span><span id="totalTo"></span></div><div class="total"><span>Saving</span><span id="saving" class="saving"></span></div></section>
 </main>
-<div id="modal" class="modal hidden" onclick="if(event.target===this)closeModal()"><div class="modalbox"><button class="close" onclick="closeModal()">×</button><h2 id="modalTitle"></h2><div id="modalBody"></div></div></div>
+</div>
 <script>
-const countries={DE:['🇩🇪','Germany'],ES:['🇪🇸','Spain'],FR:['🇫🇷','France'],IT:['🇮🇹','Italy'],AT:['🇦🇹','Austria'],HR:['🇭🇷','Croatia'],PT:['🇵🇹','Portugal'],GR:['🇬🇷','Greece'],CZ:['🇨🇿','Czechia'],PL:['🇵🇱','Poland']};
-const products=[['fuel','Fuel — Super 95'],['diesel','Fuel — Diesel'],['milk','Milk'],['eggs','Eggs'],['chicken','Chicken breast'],['bread','Bread'],['rice','Rice'],['cheese','Cheese'],['apples','Apples'],['potatoes','Potatoes'],['beer','Beer'],['wine','Wine'],['cigs','Cigarettes']];
-let data=null,from='DE',to='ES',filter='all',basket={};
-const $=id=>document.getElementById(id);
-function money(v){return '€'+v.toFixed(v<10?2:2)}
-function init(){
-const f=$('from'),t=$('to');Object.entries(countries).forEach(([k,v])=>{f.add(new Option(v[1],k));t.add(new Option(v[1],k))});f.value=from;t.value=to;
-f.onchange=()=>{from=f.value;render()};t.onchange=()=>{to=t.value;render()};
-products.forEach((p,i)=>{const b=document.createElement('button');b.className='pill'+(i===0?' active':'');b.textContent=p[1];b.onclick=()=>{filter=p[0];document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()};$('pills').appendChild(b)});
-fetch('https://raw.githubusercontent.com/oleksiy78/EuroPrice/main/prices.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(r.status);return r.json()}).then(j=>{data=j;render()}).catch(e=>{$('summary').textContent='Unable to load prices';$('updated').textContent='Please check your internet connection.'});
-}
+const countries=[
+['DE','🇩🇪 Germany','🇩🇪 Deutschland'],['ES','🇪🇸 Spain','🇪🇸 Spanien'],['FR','🇫🇷 France','🇫🇷 Frankreich'],['IT','🇮🇹 Italy','🇮🇹 Italien'],['AT','🇦🇹 Austria','🇦🇹 Österreich'],['HR','🇭🇷 Croatia','🇭🇷 Kroatien'],['PT','🇵🇹 Portugal','🇵🇹 Portugal'],['GR','🇬🇷 Greece','🇬🇷 Griechenland'],['CZ','🇨🇿 Czechia','🇨🇿 Tschechien'],['PL','🇵🇱 Poland','🇵🇱 Polen']];
+const cats=[
+['fuel','⛽','Super 95','Super 95','€/L','fuel'],['diesel','🛢️','Diesel','Diesel','€/L','fuel'],['milk','🥛','Milk 1 L','Milch 1 L','€/L','food'],['eggs','🥚','Eggs 12 pcs','Eier 12 Stk.','€/12 pcs','food'],['chicken','🍗','Chicken breast 1 kg','Hähnchenfilet 1 kg','€/kg','food'],['bread','🍞','Bread 500 g','Brot 500 g','€/500 g','food'],['rice','🍚','Rice 1 kg','Reis 1 kg','€/kg','food'],['cheese','🧀','Cheese 1 kg','Käse 1 kg','€/kg','food'],['apples','🍎','Apples 1 kg','Äpfel 1 kg','€/kg','food'],['potatoes','🥔','Potatoes 1 kg','Kartoffeln 1 kg','€/kg','food'],['beer','🍺','Beer','Bier','€/L','drink'],['wine','🍷','Wine','Wein','€/L','drink'],['cigs','🚬','Cigarettes 20 pcs','Zigaretten 20 Stk.','€/20 pcs','other']];
+let lang='en',filter='all',data=null,openDetails=null;
+const basketQty={milk:2,eggs:1,chicken:1,bread:1,rice:1,cheese:1,apples:1,potatoes:2,beer:2,wine:1,cigs:0};
+const basketItems=[['milk','Milk','Milch','L'],['eggs','Eggs','Eier','12 pcs'],['chicken','Chicken breast','Hähnchenfilet','kg'],['bread','Bread','Brot','500 g'],['rice','Rice','Reis','kg'],['cheese','Cheese','Käse','kg'],['apples','Apples','Äpfel','kg'],['potatoes','Potatoes','Kartoffeln','kg'],['beer','Beer','Bier','L'],['wine','Wine','Wein','L'],['cigs','Cigarettes','Zigaretten','20 pcs']];
+function $(id){return document.getElementById(id)}
+function names(c){return c[lang==='en'?1:2]}
+function money(v){return '€'+Number(v).toFixed(2)}
+function fillCountries(keep=true){const oldF=$('from').value||'DE',oldT=$('to').value||'ES';['from','to'].forEach(id=>{const s=$(id);s.innerHTML='';countries.forEach(c=>s.add(new Option(names(c),c[0])))});$('from').value=keep?oldF:'DE';$('to').value=keep?oldT:'ES'}
+function tabs(){const L=lang==='en'?['All','Fuel','Food','Drinks','Other']:['Alle','Kraftstoff','Lebensmittel','Getränke','Sonstiges'];const V=['all','fuel','food','drink','other'];$('tabs').innerHTML=L.map((x,i)=>'<button class="tab '+(filter===V[i]?'active':'')+'" onclick="filter=\''+V[i]+'\';render()">'+x+'</button>').join('')}
+function header(c){const p=names(c).split(' '),flag=p.shift();return '<span class="country-head"><span class="flag">'+flag+'</span><span class="country-name">'+p.join(' ')+'</span></span>'}
+function source(k,c){const v=data.prices[c][k];return v}
 function render(){
-if(!data)return;
-const list=filter==='all'?products:products.filter(x=>x[0]===filter);
-$('hFrom').innerHTML=countries[from][0]+'<br>'+countries[from][1];$('hTo').innerHTML=countries[to][0]+'<br>'+countries[to][1];
-let cheaper=0, a=0,b=0;
-$('rows').innerHTML=list.map(([k,n])=>{const x=data.prices[from][k],y=data.prices[to][k];if(!x||!y)return '';
-const pct=((y.price-x.price)/x.price*100);const winner=x.price<y.price?countries[from][1]:x.price>y.price?countries[to][1]:'same';if(x.price<y.price)cheaper++;a+=x.price;b+=y.price;
-const shown=v=>k==='wine'?'from '+money(v):money(v);
-return '<div class="row"><div class="prod">'+n+'<div class="unit">'+x.unit+'</div></div><div class="price">'+shown(x.price)+'</div><div class="price">'+shown(y.price)+'</div><div class="diff '+(pct>0?'cheaper':'expensive')+'">'+(pct>0?'+'+pct.toFixed(0):pct.toFixed(0))+'%</div></div>'}).join('');
-$('summary').textContent=from===to?'Choose two different countries':cheaper+' of '+list.length+' selected prices are cheaper in '+countries[from][1];
-$('updated').textContent='Prices updated: '+data.meta.updated;
+ if(!data)return;
+ tabs();
+ const a=$('from').value,b=$('to').value,ca=countries.find(c=>c[0]===a),cb=countries.find(c=>c[0]===b);
+ const list=cats.filter(c=>filter==='all'||c[5]===filter);
+ let cheaper=0;
+ const rows=list.map(c=>{const x=source(c[0],a),y=source(c[0],b);if(!x||!y)return '';const pct=(y.price-x.price)/x.price*100;if(x.price<y.price)cheaper++;const wine=c[0]==='wine';const sx=money(x.price)+(wine?' <span class="from-label">'+(lang==='en'?'from':'ab')+'</span>':'');const sy=money(y.price)+(wine?' <span class="from-label">'+(lang==='en'?'from':'ab')+'</span>':'');return '<div class="item" onclick="details(\''+c[0]+'\')"><div class="name">'+c[1]+' '+(lang==='en'?c[2]:c[3])+'<span class="unit">'+c[4]+'</span></div><div class="price">'+sx+'</div><div class="price">'+sy+' <span class="badge '+(pct<0?'':'higher')+'">'+Math.abs(pct).toFixed(0)+'%</span></div></div>'+(openDetails===c[0]?detailBox(c[0],a,b):'')}).join('');
+ const avgA=list.reduce((s,c)=>s+source(c[0],a).price,0)/list.length,avgB=list.reduce((s,c)=>s+source(c[0],b).price,0)/list.length;
+ const diff=(avgB-avgA)/avgA*100,win=diff<0?cb:ca;
+ $('result').innerHTML='<div class="card"><div class="head"><span></span><span>'+header(ca)+'</span><span>'+header(cb)+'</span></div>'+rows+'</div><div class="summary"><div class="big">'+(lang==='en'?names(win)+' is cheaper by '+Math.abs(diff).toFixed(1)+'%':names(win)+' ist günstiger um '+Math.abs(diff).toFixed(1)+'%')+'</div><div class="small">'+(lang==='en'?'Average based on the items shown. Prices are indicative retail references; wine shows the lowest observed price.':'Durchschnitt auf Basis der angezeigten Produkte. Die Preise sind Richtwerte; Wein zeigt den niedrigsten beobachteten Preis.')+'</div></div><div class="update">'+(lang==='en'?'Prices updated: ':'Preise aktualisiert: ')+(data.meta?.updated||'07.10.2026')+'</div>';
+ renderBasket();
 }
-function showBasket(){ $('basket').classList.toggle('hidden');renderBasket();$('basket').scrollIntoView({behavior:'smooth'})}
-function add(k,d){basket[k]=(basket[k]||0)+d;if(basket[k]<=0)delete basket[k];renderBasket()}
-function renderBasket(){if(!data)return;const keys=Object.keys(basket);$('basketItems').innerHTML=keys.length?keys.map(k=>{const p=products.find(x=>x[0]===k);return '<div class="basket-item"><div><b>'+p[1]+'</b><div class="unit">'+data.prices[from][k].unit+'</div></div><div class="qty"><button onclick="add(\''+k+'\',-1)">−</button><span>'+basket[k]+'</span><button onclick="add(\''+k+'\',1)">+</button></div></div>'}).join(''):'<div class="unit">No products selected yet.</div>';
-let a=0,b=0;keys.forEach(k=>{a+=data.prices[from][k].price*basket[k];b+=data.prices[to][k].price*basket[k]});$('totalFrom').textContent=countries[from][1]+': '+money(a);$('totalTo').textContent=countries[to][1]+': '+money(b);$('saving').textContent=money(Math.abs(a-b))+' ('+(a?Math.abs(a-b)/a*100:0).toFixed(1)+'%)'}
-function showDetails(){if(!data)return;const list=filter==='all'?products:products.filter(x=>x[0]===filter);$('modalTitle').textContent='Price details';$('modalBody').innerHTML=list.map(([k,n])=>{const x=data.prices[from][k],y=data.prices[to][k];if(!x||!y)return '';return '<p><b>'+n+'</b><br>'+countries[from][1]+': '+x.source+' — '+x.date+'<br>'+countries[to][1]+': '+y.source+' — '+y.date+'</p>'}).join('');$('modal').classList.remove('hidden')}
-function closeModal(){$('modal').classList.add('hidden')}
-init();
+function detailBox(k,a,b){const x=data.prices[a][k],y=data.prices[b][k],c=cats.find(z=>z[0]===k),ca=countries.find(z=>z[0]===a),cb=countries.find(z=>z[0]===b);return '<div class="details"><div class="details-head"><b>'+c[lang==='en'?2:3]+'</b><button onclick="event.stopPropagation();openDetails=null;render()">×</button></div><div class="details-grid"><div><b>'+names(ca)+'</b><br>'+(lang==='en'?'Source':'Quelle')+': '+x.source+'<br>'+(lang==='en'?'Date':'Datum')+': '+x.date+'<br>'+x.quality+'</div><div><b>'+names(cb)+'</b><br>'+(lang==='en'?'Source':'Quelle')+': '+y.source+'<br>'+(lang==='en'?'Date':'Datum')+': '+y.date+'<br>'+y.quality+'</div></div></div>'}
+function details(k){openDetails=openDetails===k?null:k;render()}
+function setLang(l){lang=l;$('en').classList.toggle('active',l==='en');$('de').classList.toggle('active',l==='de');$('subtitle').textContent=l==='en'?'Compare everyday prices across Europe':'Alltagspreise in Europa vergleichen';$('fromLabel').textContent=l==='en'?'From':'Von';$('toLabel').textContent=l==='en'?'To':'Nach';$('basketTitle').textContent=l==='en'?'My Basket':'Mein Warenkorb';$('basketHint').textContent=l==='en'?'Choose quantities for the items you want to compare.':'Mengen der gewünschten Artikel auswählen.';$('clear').textContent=l==='en'?'Clear':'Leeren';fillCountries(true);render()}
+function renderBasket(){const a=$('from').value,b=$('to').value;if(!data)return;$('basketItems').innerHTML=basketItems.map(x=>'<div class="basket-row"><div><div class="basket-name">'+(lang==='en'?x[1]:x[2])+'</div><div class="basket-unit">'+x[3]+'</div></div><button class="qbtn" onclick="changeQty(\''+x[0]+'\',-1)">−</button><div class="qty">'+basketQty[x[0]]+'</div><button class="qbtn" onclick="changeQty(\''+x[0]+'\',1)">+</button></div>').join('');let A=0,B=0;basketItems.forEach(x=>{A+=(data.prices[a][x[0]]?.price||0)*basketQty[x[0]];B+=(data.prices[b][x[0]]?.price||0)*basketQty[x[0]]});const d=Math.abs(A-B),p=A?d/A*100:0;$('basketResult').innerHTML='<div class="basket-grid"><div class="basket-country"><b>'+names(countries.find(c=>c[0]===a))+'</b><br>'+money(A)+'</div><div class="basket-country"><b>'+names(countries.find(c=>c[0]===b))+'</b><br>'+money(B)+'</div></div><div class="saving">'+(d<0.005?(lang==='en'?'Same price':'Gleicher Preis'):(lang==='en'?'Saving: ':'Ersparnis: ')+money(d)+' ('+p.toFixed(1)+'%)')+'</div>'}
+function changeQty(k,d){basketQty[k]=Math.max(0,basketQty[k]+d);renderBasket()}
+$('from').onchange=()=>render();$('to').onchange=()=>render();$('clear').onclick=()=>{Object.keys(basketQty).forEach(k=>basketQty[k]=0);renderBasket()};
+fillCountries(false);
+fetch('https://raw.githubusercontent.com/oleksiy78/EuroPrice/main/prices.json',{cache:'no-store'}).then(r=>r.json()).then(j=>{data=j;render()}).catch(()=>{$('result').innerHTML='<div class="summary">Unable to load prices. Please check your internet connection.</div>'});
 </script>
-</body></html>
+</body>
+</html>
