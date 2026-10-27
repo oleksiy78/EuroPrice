@@ -2,6 +2,10 @@ name: Update EuroPrice Fuel Prices
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/update_fuel.py'
+      - '.github/workflows/update-fuel.yml'
   schedule:
     - cron: "0 9 * * 4"
 
