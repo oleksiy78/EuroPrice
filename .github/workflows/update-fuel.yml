@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: python -m pip install --disable-pip-version-check pandas lxml requests
+        run: python -m pip install --disable-pip-version-check openpyxl requests
 
       - name: Update fuel prices
         run: python scripts/update_fuel.py
