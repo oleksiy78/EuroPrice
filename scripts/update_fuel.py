@@ -3,6 +3,7 @@
 import json
 import re
 from datetime import datetime, timezone
+import time
 from html.parser import HTMLParser
 from io import BytesIO
 from pathlib import Path
@@ -16,6 +17,8 @@ PRICE_FILE = Path("prices.json")
 HEADERS = {
     "User-Agent": "EuroPrice/1.0 (fuel price updater; https://github.com/oleksiy78/EuroPrice)",
     "Accept": "text/html,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,*/*",
+    "Cache-Control": "no-cache, no-store",
+    "Pragma": "no-cache",
 }
 
 COUNTRIES = {
@@ -75,7 +78,16 @@ def find_xlsx_url(page_url, html):
             candidates.append(full_url)
     if not candidates:
         raise RuntimeError("Official EC page did not expose the 'Prices with taxes' XLSX download link.")
-    return candidates[0]
+    # Prefer the newest dated attachment if the page exposes duplicate language links.
+    def attachment_date(url):
+        match = re.search(r"(\\d{4})-(\\d{2})-(\\d{2})\\.xlsx", unquote(url))
+        if not match:
+            return datetime.min
+        try:
+            return datetime(int(match.group(1)), int(match.group(2)), int(match.group(3)))
+        except ValueError:
+            return datetime.min
+    return max(candidates, key=attachment_date)
 
 
 def parse_number(value):
@@ -191,7 +203,8 @@ def parse_workbook(content):
 
 def main():
     session = requests.Session()
-    page_response = session.get(BULLETIN_URL, headers=HEADERS, timeout=30)
+    page_url = f"{BULLETIN_URL}?refresh={int(time.time())}"
+    page_response = session.get(page_url, headers=HEADERS, timeout=30)
     page_response.raise_for_status()
     if "text/html" not in page_response.headers.get("Content-Type", "").lower():
         raise RuntimeError("Official EC bulletin page did not return HTML.")
@@ -216,6 +229,14 @@ def main():
             ).strftime("%d %b %Y")
     if not bulletin_date:
         raise RuntimeError("Parsed prices, but could not verify the bulletin date; refusing to update.")
+
+    parsed_date = datetime.strptime(bulletin_date, "%d %b %Y").replace(tzinfo=timezone.utc)
+    age_days = (datetime.now(timezone.utc) - parsed_date).days
+    if age_days < -1 or age_days > 14:
+        raise RuntimeError(
+            f"Official bulletin is stale or future-dated ({bulletin_date}, age {age_days} days); "
+            "refusing to overwrite prices.json."
+        )
 
     price_file = json.loads(PRICE_FILE.read_text(encoding="utf-8"))
     for code, (petrol, diesel) in rows.items():
